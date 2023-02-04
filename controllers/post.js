@@ -27,3 +27,10 @@ module.exports.delete = async (req, res) => {
   const post = await Post.findByIdAndDelete(req.params.id);
   res.json(post);
 };
+
+module.exports.comment = async(req, res) => {
+  const post = await Post.findById(req.params.id);
+  post.comments.push(req.body);
+  post.save();
+  res.json(post);
+}
