@@ -11,4 +11,6 @@ router.route('/:id')
     .put(post.edit)
     .delete(post.delete)
 
+router.post('/:id/comment', post.comment)
+
 module.exports = router;
