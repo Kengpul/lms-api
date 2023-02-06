@@ -28,9 +28,14 @@ module.exports.delete = async (req, res) => {
   res.json(post);
 };
 
-module.exports.comment = async(req, res) => {
+module.exports.comment = async (req, res) => {
   const post = await Post.findById(req.params.id);
   post.comments.push(req.body);
   post.save();
   res.json(post);
-}
+};
+
+module.exports.uploadImage = async (req, res) => {
+  const path = req.files[0].path;
+  res.json(path);
+};
