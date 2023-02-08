@@ -5,7 +5,7 @@ const postSchema = new Schema(
   {
     content: {
       type: String,
-      required: [true, "Content cannot be blank"],
+      required: true,
     },
 
     // likes: [   like move to sprint 3
@@ -18,7 +18,6 @@ const postSchema = new Schema(
       {
         // name: String,
         content: String,
-        required: [true, "Content cannot be blank"],
       },
     ],
   },
