@@ -5,7 +5,7 @@ const postSchema = new Schema(
   {
     content: {
       type: String,
-      required: [true, "Conten cannot be blank"],
+      required: [true, "Content cannot be blank"],
     },
 
     // likes: [   like move to sprint 3
@@ -17,7 +17,8 @@ const postSchema = new Schema(
     comments: [
       {
         // name: String,
-        text: String,
+        content: String,
+        required: [true, "Content cannot be blank"],
       },
     ],
   },
