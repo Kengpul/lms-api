@@ -9,6 +9,7 @@ const cors = require("cors");
 const ExpressError = require("./utils/ExpressError");
 
 const postRoute = require("./routes/post");
+const userRoute = require("./routes/user");
 
 const dbUrl = process.env.MONGO_URI || "mongodb://localhost:27017/lms2";
 mongoose.set("strictQuery", false);
@@ -29,12 +30,13 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/post", postRoute);
+app.use("/connect", userRoute);
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));
 });
 
-app.use((error,req, res, next) => {
+app.use((error, req, res, next) => {
   const { statusCode = 500 } = error;
   if (!error.message) error.message = "Something went wrong";
   res.status(statusCode).json({ error });
