@@ -1,6 +1,9 @@
 const { isValidObjectId } = require("mongoose");
-const { postSchema, registerSchema, loginSchema } = require("../schemas");
+const jwt = require("jsonwebtoken");
 const ExpressError = require("../utils/ExpressError");
+
+const User = require("../models/user");
+const { postSchema, registerSchema, loginSchema } = require("../schemas");
 
 module.exports.validateContent = (req, res, next) => {
   validateBody(postSchema, req.body, next);
@@ -20,6 +23,19 @@ module.exports.validateId = (req, res, next) => {
   } else {
     next();
   }
+};
+
+module.exports.requireAuth = async (req, res, next) => {
+  const { authorization } = req.headers;
+
+  if (!authorization) throw new ExpressError("Unauthorized", 400);
+
+  const token = authorization.split(" ")[1];
+
+  const { _id } = jwt.verify(token, process.env.SECRET);
+  req.user = await User.findOne({ _id });
+  
+  next();
 };
 
 const validateBody = (schema, body, next) => {

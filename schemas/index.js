@@ -6,8 +6,8 @@ module.exports.postSchema = Joi.object({
 
 module.exports.registerSchema = Joi.object({
   username: Joi.string().required(),
-  password: Joi.string().min(8).required(),
   email: Joi.string().email().required(),
+  password: Joi.string().min(8).required(),
   type: Joi.string().valid("Student").valid("Teacher").required(),
 });
 
