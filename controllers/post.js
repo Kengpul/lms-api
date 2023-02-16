@@ -1,12 +1,15 @@
 const Post = require("../models/post");
 
 module.exports.index = async (req, res) => {
-  const posts = await Post.find({});
+  const posts = await Post.find({})
+    .populate("author", "username")
+    .sort({ "createdAt": "desc" });
   res.json(posts);
 };
 
 module.exports.create = async (req, res) => {
   const post = new Post(req.body);
+  post.author = req.user._id;
   post.save();
   res.json(post);
 };
