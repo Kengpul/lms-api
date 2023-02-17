@@ -7,19 +7,23 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
-
-    // likes: [   like move to sprint 3
-    //   {
-    //     name: String,
-    //   },
-    // ],
-
-    comments: [
+    likes: [
       {
-        // name: String,
-        content: String,
+        username: String,
+        date: Date,
       },
     ],
+    comments: [
+      {
+        username: String,
+        content: String,
+        date: Date,
+      },
+    ],
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

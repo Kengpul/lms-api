@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const post = require("../controllers/post");
 const multer = require("multer");
 const { storage } = require("../cloudinary");
 const upload = multer({ storage });
 const catchAsync = require("../utils/catchAsync");
-const { validateContent, validateId } = require("../middlewares");
+
+const post = require("../controllers/post");
+const { validateContent, validateId, requireAuth, isAuthor } = require("../middlewares");
+
+router.use(catchAsync(requireAuth))
 
 router
   .route("/")
@@ -16,10 +19,11 @@ router.post("/uploadimage", upload.any("content-photo"), catchAsync(post.uploadI
 
 router
   .route("/:id")
-  .get(validateId, catchAsync(post.getOne))
-  .put(validateId, validateContent, catchAsync(post.edit))
-  .delete(validateId, catchAsync(post.delete));
+  .get(validateId, catchAsync(isAuthor), catchAsync(post.getOne))
+  .put(validateId, catchAsync(isAuthor), validateContent, catchAsync(post.edit))
+  .delete(validateId, catchAsync(isAuthor), catchAsync(post.delete));
 
 router.post("/:id/comment", validateId, validateContent, catchAsync(post.comment));
+router.post("/:id/like", validateId, catchAsync(post.like));
 
 module.exports = router;
