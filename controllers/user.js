@@ -40,5 +40,5 @@ module.exports.login = async (req, res, next) => {
 
   const token = jwt.sign({ userID }, process.env.SECRET, { expiresIn: "3d" });
 
-  res.json({ username, token });
+  res.json({ username, type: user.type, token });
 };

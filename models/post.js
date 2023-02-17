@@ -7,17 +7,17 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
-
-    // likes: [   like move to sprint 3
-    //   {
-    //     name: String,
-    //   },
-    // ],
-
+    likes: [
+      {
+        username: String,
+        date: Date,
+      },
+    ],
     comments: [
       {
-        // name: String,
+        username: String,
         content: String,
+        date: Date,
       },
     ],
     author: {

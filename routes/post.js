@@ -24,5 +24,6 @@ router
   .delete(validateId, catchAsync(isAuthor), catchAsync(post.delete));
 
 router.post("/:id/comment", validateId, validateContent, catchAsync(post.comment));
+router.post("/:id/like", validateId, catchAsync(post.like));
 
 module.exports = router;

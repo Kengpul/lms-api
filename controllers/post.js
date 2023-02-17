@@ -2,8 +2,8 @@ const Post = require("../models/post");
 
 module.exports.index = async (req, res) => {
   const posts = await Post.find({})
-    .populate("author", "username")
-    .sort({ "createdAt": "desc" });
+    .populate("author")
+    .sort({ createdAt: "desc" });
   res.json(posts);
 };
 
@@ -31,9 +31,26 @@ module.exports.delete = async (req, res) => {
   res.json(post);
 };
 
+module.exports.like = async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  const liked = post.likes.find((like) => like.username === req.body.content);
+  if (!liked) {
+    post.likes.push({ username: req.body.content, date: Date.now() });
+  } else {
+    const likes = post.likes.filter((like) => like !== liked);
+    post.likes = likes;
+  }
+  post.save();
+  res.json(post);
+};
+
 module.exports.comment = async (req, res) => {
   const post = await Post.findById(req.params.id);
-  post.comments.push(req.body);
+  post.comments.push({
+    ...req.body,
+    username: req.user.username,
+    date: Date.now(),
+  });
   post.save();
   res.json(post);
 };
