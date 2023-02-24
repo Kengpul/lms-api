@@ -4,7 +4,13 @@ const ExpressError = require("../utils/ExpressError");
 
 const User = require("../models/user");
 const Post = require("../models/post");
-const { postSchema, registerSchema, loginSchema } = require("../schemas");
+const Room = require("../models/room");
+const {
+  postSchema,
+  registerSchema,
+  loginSchema,
+  createRoomSchema,
+} = require("../schemas");
 
 module.exports.validateContent = (req, res, next) => {
   validateBody(postSchema, req.body, next);
@@ -16,6 +22,10 @@ module.exports.validateRegister = (req, res, next) => {
 
 module.exports.validateLogin = (req, res, next) => {
   validateBody(loginSchema, req.body, next);
+};
+
+module.exports.validateCreateRoom = (req, res, next) => {
+  validateBody(createRoomSchema, req.body, next);
 };
 
 module.exports.validateId = (req, res, next) => {
@@ -47,6 +57,21 @@ module.exports.isAuthor = async (req, res, next) => {
   } else {
     next();
   }
+};
+
+module.exports.uniqueRoom = async (req, res, next) => {
+  const { name, code } = req.body;
+
+  const nameExist = await Room.findOne({ name });
+  if (nameExist) {
+    throw new ExpressError("Name already in used", 400);
+  }
+  const codeExist = await Room.findOne({ code });
+  if (codeExist) {
+    throw new ExpressError("Code Already in used", 400);
+  }
+
+  next();
 };
 
 const validateBody = (schema, body, next) => {

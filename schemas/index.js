@@ -28,3 +28,8 @@ module.exports.loginSchema = Joi.object({
   username: Joi.string().required(),
   password: Joi.string().required(),
 });
+
+module.exports.createRoomSchema = Joi.object({
+  name: Joi.string().required(),
+  code: Joi.string().required(),
+});

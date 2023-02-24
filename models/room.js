@@ -17,6 +17,7 @@ const roomSchema = new Schema({
   code: {
     type: String,
     required: true,
+    unique: true,
   },
   posts: [
     {

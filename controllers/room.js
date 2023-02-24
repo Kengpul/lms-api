@@ -1,5 +1,6 @@
 const Room = require("../models/room");
 const User = require("../models/user");
+const ExpressError = require("../utils/ExpressError");
 
 module.exports.getAll = async (req, res) => {
   const user = await User.findById(req.user._id).populate({
@@ -30,9 +31,20 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.join = async (req, res) => {
-  const room = await Room.findOne(req.body);
-  const user = req.user;
+  const { code } = req.body;
+
+  if (!code) return;
+  const codeExist = await Room.findOne({ code });
+  if (!codeExist) throw new ExpressError("Invalid code", 400);
+
+  const user = await User.findById(req.user._id).populate("rooms");
+  const joined = user.rooms.find((room) => room.code === code);
+  if (joined)
+    throw new ExpressError("You are already member of this room", 400);
+
+  const room = await Room.findOne({ code });
   room.pending.push(user._id);
+
   await room.save();
   await user.save();
   res.json(room);
