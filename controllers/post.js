@@ -1,4 +1,6 @@
 const Post = require("../models/post");
+const User = require("../models/user");
+const Room = require("../models/room");
 
 module.exports.index = async (req, res) => {
   const posts = await Post.find({})
@@ -8,10 +10,23 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-  const post = new Post(req.body);
+  const { content, rooms } = req.body;
+  const post = new Post({ content });
   post.author = req.user._id;
+
+  for (let roomId of rooms) {
+    const room = await Room.findById(roomId.value);
+    room.posts.push(room._id);
+    await room.save();
+  }
+
   post.save();
   res.json(post);
+};
+
+module.exports.getRooms = async (req, res) => {
+  const rooms = await User.findById(req.user._id).populate("rooms");
+  res.json(rooms);
 };
 
 module.exports.getOne = async (req, res) => {

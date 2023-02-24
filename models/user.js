@@ -21,6 +21,12 @@ const userSchema = new Schema({
     required: true,
     enum: ["Student", "Teacher"],
   },
+  rooms: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Room",
+    },
+  ],
 });
 
 module.exports = mongoose.model("User", userSchema);
