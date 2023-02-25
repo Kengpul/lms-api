@@ -10,22 +10,23 @@ const {
   registerSchema,
   loginSchema,
   createRoomSchema,
+  roomLinkSchema
 } = require("../schemas");
 
 module.exports.validateContent = (req, res, next) => {
   validateBody(postSchema, req.body, next);
 };
-
 module.exports.validateRegister = (req, res, next) => {
   validateBody(registerSchema, req.body, next);
 };
-
 module.exports.validateLogin = (req, res, next) => {
   validateBody(loginSchema, req.body, next);
 };
-
 module.exports.validateCreateRoom = (req, res, next) => {
   validateBody(createRoomSchema, req.body, next);
+};
+module.exports.validateLinks = (req, res, next) => {
+  validateBody(roomLinkSchema, req.body, next);
 };
 
 module.exports.validateId = (req, res, next) => {

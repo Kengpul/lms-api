@@ -102,3 +102,10 @@ module.exports.leave = async (req, res) => {
   user.save();
   res.json(user.rooms);
 };
+
+module.exports.links = async (req, res) => {
+  const room = await Room.findById(req.params.id);
+  room.link = req.body;
+  await room.save();
+  res.json(room.link);
+};

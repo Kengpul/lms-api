@@ -33,3 +33,8 @@ module.exports.createRoomSchema = Joi.object({
   name: Joi.string().required(),
   code: Joi.string().required(),
 });
+
+module.exports.roomLinkSchema = Joi.object({
+  attendance: Joi.string().allow("").uri().optional(),
+  meeting: Joi.string().allow("").uri().optional(),
+});

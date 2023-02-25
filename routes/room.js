@@ -5,6 +5,7 @@ const {
   requireAuth,
   validateCreateRoom,
   uniqueRoom,
+  validateLinks
 } = require("../middlewares/");
 const room = require("../controllers/room");
 
@@ -18,6 +19,7 @@ router.post("/join", catchAsync(room.join));
 
 router.route("/:id")
     .get(catchAsync(room.getOne))
+    .put(validateLinks, catchAsync(room.links))
     .delete(catchAsync(room.leave))
 
 router.route("/:id/pending")

@@ -31,11 +31,11 @@ const roomSchema = new Schema({
   link: {
     attendance: {
       type: String,
-      default: null,
+      default: "",
     },
     meeting: {
       type: String,
-      default: null,
+      default: "",
     },
   },
 });
