@@ -16,7 +16,9 @@ router.route("/")
 
 router.post("/join", catchAsync(room.join));
 
-router.get("/:id", catchAsync(room.getOne));
+router.route("/:id")
+    .get(catchAsync(room.getOne))
+    .delete(catchAsync(room.leave))
 
 router.route("/:id/pending")
   .post(catchAsync(room.accept))

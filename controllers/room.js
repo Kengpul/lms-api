@@ -89,3 +89,16 @@ module.exports.accept = async (req, res) => {
 
   res.json(updatedRoom);
 };
+
+module.exports.leave = async (req, res) => {
+  const user = await User.findById(req.user._id).populate({
+    path: "rooms",
+    populate: {
+      path: "teachers",
+    },
+  });
+  const rooms = user.rooms.filter((room) => room._id != req.params.id);
+  user.rooms = rooms;
+  user.save();
+  res.json(user.rooms);
+};
