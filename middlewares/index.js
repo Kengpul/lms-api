@@ -10,7 +10,7 @@ const {
   registerSchema,
   loginSchema,
   createRoomSchema,
-  roomLinkSchema
+  roomLinkSchema,
 } = require("../schemas");
 
 module.exports.validateContent = (req, res, next) => {
@@ -58,6 +58,12 @@ module.exports.isAuthor = async (req, res, next) => {
   } else {
     next();
   }
+};
+
+module.exports.isTeacher = async (req, res, next) => {
+  if (req.user.type !== "Teacher")
+    throw new ExpressError("Only teache account can create rooms");
+  next();
 };
 
 module.exports.uniqueRoom = async (req, res, next) => {

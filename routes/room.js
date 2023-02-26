@@ -5,7 +5,9 @@ const {
   requireAuth,
   validateCreateRoom,
   uniqueRoom,
-  validateLinks
+  validateLinks,
+  validateId,
+  isTeacher
 } = require("../middlewares/");
 const room = require("../controllers/room");
 
@@ -13,18 +15,18 @@ router.use(catchAsync(requireAuth));
 
 router.route("/")
   .get(catchAsync(room.getAll))
-  .post(validateCreateRoom, catchAsync(uniqueRoom), catchAsync(room.create));
+  .post(catchAsync(isTeacher), validateCreateRoom, catchAsync(uniqueRoom), catchAsync(room.create));
 
 router.post("/join", catchAsync(room.join));
 
 router.route("/:id")
-    .get(catchAsync(room.getPosts))
-    .post(catchAsync(room.getOne))
-    .put(validateLinks, catchAsync(room.links))
-    .delete(catchAsync(room.leave))
+    .get(validateId, catchAsync(room.getPosts))
+    .post(validateId, catchAsync(room.getOne))
+    .put(validateId,catchAsync(isTeacher), validateLinks, catchAsync(room.links))
+    .delete(validateId, catchAsync(room.leave))
 
 router.route("/:id/pending")
-  .post(catchAsync(room.accept))
-  .delete(catchAsync(room.reject));
+  .post(validateId, catchAsync(room.accept))
+  .delete(validateId, catchAsync(room.reject));
 
 module.exports = router;
