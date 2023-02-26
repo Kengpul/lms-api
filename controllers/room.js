@@ -22,9 +22,9 @@ module.exports.getOne = async (req, res) => {
 };
 
 module.exports.getPosts = async (req, res) => {
-  const posts = await Post.find({
-    rooms: { $in: [req.params.id] },
-  });
+  const posts = await Post.find({ room: req.params.id })
+    .populate("room")
+    .populate("author");
   res.json(posts);
 };
 

@@ -24,12 +24,10 @@ const postSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    rooms: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Room",
-      },
-    ],
+    room: {
+      type: Schema.Types.ObjectId,
+      ref: "Room",
+    },
   },
   { timestamps: true }
 );
