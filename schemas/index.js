@@ -11,6 +11,12 @@ module.exports.postSchema = Joi.object({
     content: Joi.string().required(),
     date: Joi.date().required(),
   }),
+  rooms: Joi.array().items(
+    Joi.object({
+      value: Joi.string().required(),
+      label: Joi.string().required(),
+    }).required()
+  ),
 });
 
 module.exports.registerSchema = Joi.object({
@@ -23,4 +29,14 @@ module.exports.registerSchema = Joi.object({
 module.exports.loginSchema = Joi.object({
   username: Joi.string().required(),
   password: Joi.string().required(),
+});
+
+module.exports.createRoomSchema = Joi.object({
+  name: Joi.string().required(),
+  code: Joi.string().required(),
+});
+
+module.exports.roomLinkSchema = Joi.object({
+  attendance: Joi.string().allow("").uri().optional(),
+  meeting: Joi.string().allow("").uri().optional(),
 });

@@ -1,21 +1,40 @@
 const Post = require("../models/post");
+const User = require("../models/user");
+const Room = require("../models/room");
 
 module.exports.index = async (req, res) => {
   const posts = await Post.find({})
     .populate("author")
+    .populate("room")
     .sort({ createdAt: "desc" });
   res.json(posts);
 };
 
 module.exports.create = async (req, res) => {
-  const post = new Post(req.body);
-  post.author = req.user._id;
-  post.save();
-  res.json(post);
+  const { content, rooms } = req.body;
+
+  for (let roomId of rooms) {
+    const post = new Post({ content });
+    const room = await Room.findById(roomId.value);
+
+    post.author = req.user._id;
+    room.posts.push(room._id);
+    post.room = roomId.value;
+
+    await room.save();
+    post.save();
+
+    res.json(post);
+  }
+};
+
+module.exports.getRooms = async (req, res) => {
+  const rooms = await User.findById(req.user._id).populate("rooms");
+  res.json(rooms);
 };
 
 module.exports.getOne = async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id).populate("room");
   res.json(post);
 };
 
@@ -32,7 +51,9 @@ module.exports.delete = async (req, res) => {
 };
 
 module.exports.like = async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id)
+    .populate("room")
+    .populate("author");
   const liked = post.likes.find((like) => like.username === req.body.content);
   if (!liked) {
     post.likes.push({ username: req.body.content, date: Date.now() });
