@@ -18,7 +18,8 @@ router.route("/")
 router.post("/join", catchAsync(room.join));
 
 router.route("/:id")
-    .get(catchAsync(room.getOne))
+    .get(catchAsync(room.getPosts))
+    .post(catchAsync(room.getOne))
     .put(validateLinks, catchAsync(room.links))
     .delete(catchAsync(room.leave))
 

@@ -11,10 +11,12 @@ module.exports.postSchema = Joi.object({
     content: Joi.string().required(),
     date: Joi.date().required(),
   }),
-  rooms: Joi.array().items({
-    value: Joi.string().required(),
-    label: Joi.string().required(),
-  }),
+  rooms: Joi.array().items(
+    Joi.object({
+      value: Joi.string().required(),
+      label: Joi.string().required(),
+    }).required()
+  ),
 });
 
 module.exports.registerSchema = Joi.object({

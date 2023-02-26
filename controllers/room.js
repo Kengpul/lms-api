@@ -1,4 +1,5 @@
 const Room = require("../models/room");
+const Post = require("../models/post");
 const User = require("../models/user");
 const ExpressError = require("../utils/ExpressError");
 
@@ -18,6 +19,13 @@ module.exports.getOne = async (req, res) => {
     .populate("students")
     .populate("pending");
   res.json(room);
+};
+
+module.exports.getPosts = async (req, res) => {
+  const posts = await Post.find({
+    rooms: { $in: [req.params.id] },
+  });
+  res.json(posts);
 };
 
 module.exports.create = async (req, res) => {

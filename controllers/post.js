@@ -17,6 +17,7 @@ module.exports.create = async (req, res) => {
   for (let roomId of rooms) {
     const room = await Room.findById(roomId.value);
     room.posts.push(room._id);
+    post.rooms.push(roomId.value);
     await room.save();
   }
 
