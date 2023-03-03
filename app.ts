@@ -2,15 +2,15 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-const express = require("express");
+import express, { Request, Response, NextFunction } from "express";
 const app = express();
-const mongoose = require("mongoose");
-const cors = require("cors");
-const ExpressError = require("./utils/ExpressError");
+import mongoose from "mongoose";
+import cors from "cors";
+import ExpressError from "./utils/ExpressError.js";
 
-const postRoute = require("./routes/post");
-const userRoute = require("./routes/user");
-const roomRoute = require("./routes/room");
+import postRoute from "./routes/post";
+import userRoute from "./routes/user";
+import roomRoute from "./routes/room";
 
 const dbUrl = process.env.MONGO_URI || "mongodb://localhost:27017/lms2";
 mongoose.set("strictQuery", false);
@@ -38,7 +38,12 @@ app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));
 });
 
-app.use((error, req, res, next) => {
+interface Error {
+  statusCode: number;
+  message: string;
+}
+
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   const { statusCode = 500 } = error;
   if (!error.message) error.message = "Something went wrong";
   res.status(statusCode).json({ error });

@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import { IRoom } from "../types/common";
 const { Schema } = mongoose;
 
 const userObject = [
@@ -40,4 +41,6 @@ const roomSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Room", roomSchema);
+const Room = mongoose.model<IRoom>("Room", roomSchema);
+
+export default Room;
