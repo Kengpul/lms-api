@@ -1,10 +1,15 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
-const ExpressError = require("../utils/ExpressError");
-const User = require("../models/user");
+import ExpressError from "../utils/ExpressError";
+import User from "../models/user";
 
-module.exports.signup = async (req, res, next) => {
+export const signup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { username, password, email, type } = req.body;
 
   const exsitUsername = await User.findOne({ username });
@@ -21,12 +26,18 @@ module.exports.signup = async (req, res, next) => {
 
   user.save();
 
-  const token = jwt.sign({ userID }, process.env.SECRET, { expiresIn: "3d" });
+  const token = jwt.sign({ userID }, process.env.SECRET as string, {
+    expiresIn: "3d",
+  });
 
   res.json({ username, token });
 };
 
-module.exports.login = async (req, res, next) => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { username, password } = req.body;
 
   const user = await User.findOne({ username });
@@ -38,7 +49,9 @@ module.exports.login = async (req, res, next) => {
 
   const userID = user._id;
 
-  const token = jwt.sign({ userID }, process.env.SECRET, { expiresIn: "3d" });
+  const token = jwt.sign({ userID }, process.env.SECRET as string, {
+    expiresIn: "3d",
+  });
 
   res.json({ username, type: user.type, token });
 };

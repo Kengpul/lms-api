@@ -1,6 +1,6 @@
-const Joi = require("joi");
+import Joi from "joi";
 
-module.exports.postSchema = Joi.object({
+export const postSchema = Joi.object({
   content: Joi.string().required(),
   likes: Joi.array().items({
     name: Joi.string().required(),
@@ -19,24 +19,24 @@ module.exports.postSchema = Joi.object({
   ),
 });
 
-module.exports.registerSchema = Joi.object({
+export const registerSchema = Joi.object({
   username: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
   type: Joi.string().valid("Student").valid("Teacher").required(),
 });
 
-module.exports.loginSchema = Joi.object({
+export const loginSchema = Joi.object({
   username: Joi.string().required(),
   password: Joi.string().required(),
 });
 
-module.exports.createRoomSchema = Joi.object({
+export const createRoomSchema = Joi.object({
   name: Joi.string().required(),
   code: Joi.string().required(),
 });
 
-module.exports.roomLinkSchema = Joi.object({
+export const roomLinkSchema = Joi.object({
   attendance: Joi.string().allow("").uri().optional(),
   meeting: Joi.string().allow("").uri().optional(),
 });
