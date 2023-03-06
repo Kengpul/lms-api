@@ -40,3 +40,17 @@ export const roomLinkSchema = Joi.object({
   attendance: Joi.string().allow("").uri().optional(),
   meeting: Joi.string().allow("").uri().optional(),
 });
+
+export const quizSchema = Joi.object({
+  title: Joi.string().required(),
+  due: Joi.string().required(),
+  quizzes: Joi.array().items(
+    Joi.object({
+      question: Joi.string().required(),
+      choices: Joi.array().items({
+        answer: Joi.string().required(),
+        isCorrect: Joi.boolean().required(),
+      }),
+    }).required()
+  ),
+});

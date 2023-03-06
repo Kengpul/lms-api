@@ -1,7 +1,7 @@
 import { Request } from "express";
 import mongoose, { Document } from "mongoose";
 
-export interface IPost extends IUser{
+export interface IPost extends IUser {
   readonly _id: mongoose.Types.ObjectId;
   content: string;
   likes: ILike[];
@@ -53,4 +53,15 @@ export interface IUser {
 
 export interface RequestAuth extends Request {
   user: IUser;
+}
+
+export interface Iquiz {
+  readonly _id: mongoose.Types.ObjectId;
+  title: string;
+  due: string;
+  quizzes: Array<{
+    question: string;
+    choices: Array<{ answer: string; isCorrect: boolean }>;
+  }>;
+  author: mongoose.Types.ObjectId;
 }
