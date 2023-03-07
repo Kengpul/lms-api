@@ -15,6 +15,7 @@ router
 router
   .route("/:id")
   .get(validateId, catchAsync(quiz.getOne))
-  .put(validateId, catchAsync(quiz.edit));
+  .put(validateId, catchAsync(quiz.edit))
+  .delete(validateId, catchAsync(quiz.destroy));
 
 export default router;

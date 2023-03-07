@@ -25,3 +25,8 @@ export const edit = async (req: Request, res: Response) => {
   const quiz = await Quiz.findByIdAndUpdate(req.params.id, req.body);
   res.json(quiz);
 };
+
+export const destroy = async (req: Request, res: Response) => {
+  const quiz = await Quiz.findByIdAndDelete(req.params.id);
+  res.json(quiz);
+};
