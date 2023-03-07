@@ -12,6 +12,9 @@ router
   .get(catchAsync(quiz.getAll))
   .post(validateQuiz, catchAsync(quiz.create));
 
-router.get("/:id", validateId, catchAsync(quiz.getOne));
+router
+  .route("/:id")
+  .get(validateId, catchAsync(quiz.getOne))
+  .put(validateId, catchAsync(quiz.edit));
 
 export default router;

@@ -9,14 +9,19 @@ export const getAll = async (req: RequestAuth, res: Response) => {
   res.json(quizzes);
 };
 
-export const getOne = async(req: Request, res: Response) => {
+export const getOne = async (req: Request, res: Response) => {
   const quiz = await Quiz.findById(req.params.id);
   res.json(quiz);
-}
+};
 
 export const create = (req: RequestAuth, res: Response) => {
   const quiz = new Quiz(req.body);
   quiz.author = req.user._id;
   quiz.save();
+  res.json(quiz);
+};
+
+export const edit = async (req: Request, res: Response) => {
+  const quiz = await Quiz.findByIdAndUpdate(req.params.id, req.body);
   res.json(quiz);
 };
