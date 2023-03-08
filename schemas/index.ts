@@ -54,3 +54,18 @@ export const quizSchema = Joi.object({
     }).required()
   ),
 });
+
+export const publishQuizSchema = Joi.object({
+  selectedRooms: Joi.array().items(
+    Joi.object({
+      label: Joi.string().required(),
+      value: Joi.string().required(),
+    }).required()
+  ),
+  selectedQuizzes: Joi.array().items(
+    Joi.object({
+      label: Joi.string().required(),
+      value: Joi.string().required(),
+    }).required()
+  ),
+});

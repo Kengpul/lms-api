@@ -1,6 +1,11 @@
 import express from "express";
 import * as quiz from "../controllers/quiz";
-import { requireAuth, validateQuiz, validateId } from "../middlewares";
+import {
+  requireAuth,
+  validateQuiz,
+  validateId,
+  validateAddQuiz,
+} from "../middlewares";
 import catchAsync from "../utils/catchAsync";
 
 const router = express.Router();
@@ -11,6 +16,8 @@ router
   .route("/")
   .get(catchAsync(quiz.getAll))
   .post(validateQuiz, catchAsync(quiz.create));
+
+router.post("/publish", validateAddQuiz, catchAsync(quiz.publish));
 
 router
   .route("/:id")

@@ -36,6 +36,7 @@ export interface IRoom {
     attendance: string;
     meeting: string;
   };
+  quizzes: mongoose.Types.ObjectId[];
 }
 
 export interface IOptions {

@@ -14,6 +14,7 @@ import {
   createRoomSchema,
   roomLinkSchema,
   quizSchema,
+  publishQuizSchema,
 } from "../schemas";
 
 interface JwtPayload {
@@ -66,6 +67,14 @@ export const validateQuiz = (
   next: NextFunction
 ) => {
   validateBody(quizSchema, req.body, next);
+};
+
+export const validateAddQuiz = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  validateBody(publishQuizSchema, req.body, next);
 };
 
 export const validateId = (req: Request, res: Response, next: NextFunction) => {
