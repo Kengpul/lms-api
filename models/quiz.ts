@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Iquiz } from "../types/common";
+import { IQuiz } from "../types/common";
 const { Schema } = mongoose;
 
 const quizSchema = new Schema({
@@ -17,6 +17,6 @@ const quizSchema = new Schema({
   },
 });
 
-const Quiz = mongoose.model<Iquiz>("Quiz", quizSchema);
+const Quiz = mongoose.model<IQuiz>("Quiz", quizSchema);
 
 export default Quiz;

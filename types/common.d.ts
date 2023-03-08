@@ -30,7 +30,7 @@ export interface IRoom {
   code: string;
   posts: mongoose.Types.ObjectId[];
   teachers: mongoose.Types.ObjectId[];
-  students: mongoose.Types.ObjectId[];
+  students: IUser[];
   pending: mongoose.Types.ObjectId[];
   link: {
     attendance: string;
@@ -50,13 +50,17 @@ export interface IUser {
   password: string;
   type: AccountType;
   rooms: mongoose.Types.ObjectId[];
+  quizzes: {
+    pending: mongoose.Types.ObjectId[];
+    completed: mongoose.Types.ObjectId[];
+  };
 }
 
 export interface RequestAuth extends Request {
   user: IUser;
 }
 
-export interface Iquiz {
+export interface IQuiz {
   readonly _id: mongoose.Types.ObjectId;
   title: string;
   due: string;

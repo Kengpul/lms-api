@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { RequestAuth } from "../types/common";
+import { IUser, RequestAuth } from "../types/common";
 import Quiz from "../models/quiz";
 import User from "../models/user";
 import Room from "../models/room";
@@ -36,14 +36,18 @@ export const publish = async (req: Request, res: Response) => {
   const { selectedRooms, selectedQuizzes } = req.body;
 
   const quizzes = [];
-
   for (let quiz of selectedQuizzes) {
     quizzes.push(quiz.value);
   }
 
   for (let room of selectedRooms) {
-    const foundRoom = await Room.findById(room.value);
+    const foundRoom = await Room.findById(room.value).populate("students");
     foundRoom!.quizzes.push(...quizzes);
+    for (let student of foundRoom!.students) {
+      const user = await User.findById(student._id);
+      user?.quizzes.pending.push(...quizzes);
+      await user?.save();
+    }
     await foundRoom!.save();
   }
 
