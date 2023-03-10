@@ -11,6 +11,7 @@ import ExpressError from "./utils/ExpressError.js";
 import postRoute from "./routes/post";
 import userRoute from "./routes/user";
 import roomRoute from "./routes/room";
+import quizRoute from "./routes/quiz";
 
 const dbUrl = process.env.MONGO_URI || "mongodb://localhost:27017/lms2";
 mongoose.set("strictQuery", false);
@@ -33,6 +34,7 @@ app.use(express.json());
 app.use("/post", postRoute);
 app.use("/connect", userRoute);
 app.use("/room", roomRoute);
+app.use("/quiz", quizRoute);
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));

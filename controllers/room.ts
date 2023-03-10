@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 import { RequestAuth, IRoom } from "../types/common";
 import ExpressError from "../utils/ExpressError";
@@ -11,6 +11,10 @@ import User from "../models/user";
 interface RoomsPoPulate extends Document {
   type: "Teacher" | "Student";
   rooms: IRoom[];
+  quizzes: {
+    pending: mongoose.Types.ObjectId[];
+    completed: mongoose.Types.ObjectId[];
+  };
 }
 
 export const getAll = async (req: RequestAuth, res: Response) => {
@@ -85,7 +89,7 @@ export const accept = async (req: Request, res: Response) => {
   const { id } = req.body;
   const { id: roomId } = req.params;
 
-  const room = await Room.findById(roomId);
+  const room = await Room.findById(roomId).populate("quizzes");
   const user = await User.findById<RoomsPoPulate>(req.body.id);
   if (!room) return new ExpressError("No room", 400);
   if (!user) return new ExpressError("No user", 400);
@@ -99,6 +103,10 @@ export const accept = async (req: Request, res: Response) => {
     room.teachers.push(id);
   } else {
     room.students.push(id);
+  }
+
+  for (let quiz of room.quizzes) {
+    user.quizzes.pending.push(quiz._id);
   }
 
   await room.save();

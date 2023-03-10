@@ -1,7 +1,7 @@
 import { Request } from "express";
 import mongoose, { Document } from "mongoose";
 
-export interface IPost extends IUser{
+export interface IPost extends IUser {
   readonly _id: mongoose.Types.ObjectId;
   content: string;
   likes: ILike[];
@@ -30,12 +30,13 @@ export interface IRoom {
   code: string;
   posts: mongoose.Types.ObjectId[];
   teachers: mongoose.Types.ObjectId[];
-  students: mongoose.Types.ObjectId[];
+  students: IUser[];
   pending: mongoose.Types.ObjectId[];
   link: {
     attendance: string;
     meeting: string;
   };
+  quizzes: mongoose.Types.ObjectId[];
 }
 
 export interface IOptions {
@@ -49,8 +50,23 @@ export interface IUser {
   password: string;
   type: AccountType;
   rooms: mongoose.Types.ObjectId[];
+  quizzes: {
+    pending: mongoose.Types.ObjectId[];
+    completed: mongoose.Types.ObjectId[];
+  };
 }
 
 export interface RequestAuth extends Request {
   user: IUser;
+}
+
+export interface IQuiz {
+  readonly _id: mongoose.Types.ObjectId;
+  title: string;
+  due: string;
+  quizzes: Array<{
+    question: string;
+    choices: Array<{ answer: string; isCorrect: boolean }>;
+  }>;
+  author: mongoose.Types.ObjectId;
 }

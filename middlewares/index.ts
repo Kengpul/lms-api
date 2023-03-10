@@ -13,6 +13,8 @@ import {
   loginSchema,
   createRoomSchema,
   roomLinkSchema,
+  quizSchema,
+  publishQuizSchema,
 } from "../schemas";
 
 interface JwtPayload {
@@ -57,6 +59,22 @@ export const validateLinks = (
   next: NextFunction
 ) => {
   validateBody(roomLinkSchema, req.body, next);
+};
+
+export const validateQuiz = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  validateBody(quizSchema, req.body, next);
+};
+
+export const validateAddQuiz = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  validateBody(publishQuizSchema, req.body, next);
 };
 
 export const validateId = (req: Request, res: Response, next: NextFunction) => {

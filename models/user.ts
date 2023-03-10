@@ -28,6 +28,23 @@ const userSchema = new Schema({
       ref: "Room",
     },
   ],
+  quizzes: {
+    pending: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Quiz",
+      },
+    ],
+    completed: [
+      {
+        _id: {
+          type: Schema.Types.ObjectId,
+          ref: "Quiz",
+        },
+        score: Number,
+      },
+    ],
+  },
 });
 
 const User = mongoose.model<IUser>("User", userSchema);

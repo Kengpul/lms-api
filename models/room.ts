@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { SchemaType } from "mongoose";
 import { IRoom } from "../types/common";
 const { Schema } = mongoose;
 
@@ -39,6 +39,13 @@ const roomSchema = new Schema({
       default: "",
     },
   },
+
+  quizzes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Quiz",
+    },
+  ],
 });
 
 const Room = mongoose.model<IRoom>("Room", roomSchema);
