@@ -23,6 +23,7 @@ router
   .route("/:id")
   .get(validateId, catchAsync(quiz.getOne))
   .put(validateId, catchAsync(quiz.edit))
+  .post(validateId, catchAsync(quiz.submit))
   .delete(validateId, catchAsync(quiz.destroy));
 
 export default router;

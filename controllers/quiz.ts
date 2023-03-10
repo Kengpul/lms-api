@@ -53,3 +53,20 @@ export const publish = async (req: Request, res: Response) => {
 
   res.json(req.body);
 };
+
+export const submit = async (req: RequestAuth, res: Response) => {
+  const user = await User.findById(req.user._id);
+  const quiz = await Quiz.findById(req.params.id);
+  const quizId = quiz?._id;
+
+  const complete = {
+    _id: quizId,
+    score: req.body.score,
+  };
+
+  user?.quizzes.pending.filter((quiz) => quiz._id !== quiz._id);
+  user?.quizzes.completed.push(complete as any);
+  user?.save();
+
+  res.json(req.body);
+};

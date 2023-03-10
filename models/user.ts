@@ -37,8 +37,11 @@ const userSchema = new Schema({
     ],
     completed: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Quiz",
+        _id: {
+          type: Schema.Types.ObjectId,
+          ref: "Quiz",
+        },
+        score: Number,
       },
     ],
   },
