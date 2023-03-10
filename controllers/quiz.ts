@@ -1,13 +1,27 @@
 import { Request, Response } from "express";
-import { IUser, RequestAuth } from "../types/common";
+import { RequestAuth } from "../types/common";
 import Quiz from "../models/quiz";
 import User from "../models/user";
 import Room from "../models/room";
 
 export const getAll = async (req: RequestAuth, res: Response) => {
-  // const user = await User.findById(req.user._id);
-  const quizzes = await Quiz.find().populate("author");
-  res.json(quizzes);
+  const student = await User.findById(req.user._id).populate({
+    path: "quizzes",
+    populate: {
+      path: "pending",
+      populate: {
+        path: "author",
+      },
+    },
+  });
+
+  const teacher = await Quiz.find({ author: req.user._id }).populate("quizzes");
+
+  if (req.user.type === "Teacher") {
+    res.json(teacher);
+  } else {
+    res.json(student?.quizzes.pending);
+  }
 };
 
 export const getOne = async (req: Request, res: Response) => {
@@ -55,7 +69,12 @@ export const publish = async (req: Request, res: Response) => {
 };
 
 export const submit = async (req: RequestAuth, res: Response) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user._id).populate({
+    path: "quizzes",
+    populate: {
+      path: "pending",
+    },
+  });
   const quiz = await Quiz.findById(req.params.id);
   const quizId = quiz?._id;
 
@@ -64,7 +83,10 @@ export const submit = async (req: RequestAuth, res: Response) => {
     score: req.body.score,
   };
 
-  user?.quizzes.pending.filter((quiz) => quiz._id !== quiz._id);
+  const filtered = user!.quizzes.pending.filter(
+    (q: any) => q.title != quiz!.title
+  );
+  user!.quizzes.pending = filtered;
   user?.quizzes.completed.push(complete as any);
   user?.save();
 
