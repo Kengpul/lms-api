@@ -135,6 +135,13 @@ export const leave = async (req: RequestAuth, res: Response) => {
   });
   if (!user) return new ExpressError("No user", 400);
 
+  const room = await Room.findById(req.params.id).populate("students");
+  const newRoom = room!.students.filter(
+    (user) => user.username !== req.user.username
+  );
+  room!.students = newRoom;
+  room!.save();
+
   const rooms = user.rooms.filter((room) => (room._id as any) != req.params.id);
   user.rooms = rooms;
   user.save();
