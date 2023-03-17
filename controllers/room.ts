@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose, { Document } from "mongoose";
 
-import { RequestAuth, IRoom } from "../types/common";
+import { RequestAuth, IRoom, IUser } from "../types/common";
 import ExpressError from "../utils/ExpressError";
 
 import Room from "../models/room";
@@ -62,6 +62,12 @@ export const join = async (req: RequestAuth, res: Response) => {
   const user = await User.findById<RoomsPoPulate>(req.user._id).populate(
     "rooms"
   );
+  const foundRoom = await Room.findOne({ code }).populate("pending");
+
+  const pending = foundRoom!.pending.find(
+    (p: any) => p.username === req.user.username
+  );
+  if (pending) throw new ExpressError("You are already in pending list", 400);
   const joined = user!.rooms.find((room) => room.code === code);
   if (joined)
     throw new ExpressError("You are already member of this room", 400);
