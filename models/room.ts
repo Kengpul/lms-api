@@ -1,5 +1,5 @@
 import mongoose, { SchemaType } from "mongoose";
-import { IRoom } from "../types/common";
+import { IRoom } from "../types/Room";
 const { Schema } = mongoose;
 
 const userObject = [

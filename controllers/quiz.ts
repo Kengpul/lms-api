@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { RequestAuth } from "../types/common";
+import { RequestAuth } from "../types/User";
 import Quiz from "../models/quiz";
 import User from "../models/user";
 import Room from "../models/room";

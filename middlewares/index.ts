@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { IUser, RequestAuth } from "../types/common";
+import { IUser, RequestAuth } from "../types/User";
 import { isValidObjectId } from "mongoose";
 import jwt from "jsonwebtoken";
 import ExpressError from "../utils/ExpressError";
-
 import User from "../models/user";
 import Post from "../models/post";
 import Room from "../models/room";

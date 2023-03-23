@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import mongoose, { Document } from "mongoose";
-
-import { RequestAuth, IRoom, IUser } from "../types/common";
+import { RequestAuth } from "../types/User";
+import { IRoom } from "../types/Room";
 import ExpressError from "../utils/ExpressError";
-
 import Room from "../models/room";
 import Post from "../models/post";
 import User from "../models/user";

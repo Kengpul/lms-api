@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IQuiz } from "../types/common";
+import { IQuiz } from "../types/Quiz";
 const { Schema } = mongoose;
 
 const quizSchema = new Schema({
