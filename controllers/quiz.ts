@@ -37,7 +37,9 @@ export const create = (req: RequestAuth, res: Response) => {
 };
 
 export const edit = async (req: Request, res: Response) => {
-  const quiz = await Quiz.findByIdAndUpdate(req.params.id, req.body);
+  const quiz = await Quiz.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
   res.json(quiz);
 };
 
