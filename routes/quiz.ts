@@ -8,7 +8,6 @@ import {
   validateEditQuiz,
 } from "../middlewares";
 import catchAsync from "../utils/catchAsync";
-
 const router = express.Router();
 
 router.use(catchAsync(requireAuth));
