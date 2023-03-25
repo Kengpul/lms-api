@@ -14,6 +14,7 @@ import {
   roomLinkSchema,
   quizSchema,
   publishQuizSchema,
+  editQuizSchema
 } from "../schemas";
 
 interface JwtPayload {
@@ -76,9 +77,17 @@ export const validateAddQuiz = (
   validateBody(publishQuizSchema, req.body, next);
 };
 
+export const validateEditQuiz = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  validateBody(editQuizSchema, req.body, next);
+};
+
 export const validateId = (req: Request, res: Response, next: NextFunction) => {
   if (!isValidObjectId(req.params.id)) {
-    throw new ExpressError("Post not found", 400);
+    throw new ExpressError("Content not found", 400);
   } else {
     next();
   }

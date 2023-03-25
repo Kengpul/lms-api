@@ -5,6 +5,7 @@ import {
   validateQuiz,
   validateId,
   validateAddQuiz,
+  validateEditQuiz,
 } from "../middlewares";
 import catchAsync from "../utils/catchAsync";
 
@@ -22,7 +23,7 @@ router.post("/publish", validateAddQuiz, catchAsync(quiz.publish));
 router
   .route("/:id")
   .get(validateId, catchAsync(quiz.getOne))
-  .put(validateId, catchAsync(quiz.edit))
+  .put(validateId, validateEditQuiz, catchAsync(quiz.edit))
   .post(validateId, catchAsync(quiz.submit))
   .delete(validateId, catchAsync(quiz.destroy));
 
