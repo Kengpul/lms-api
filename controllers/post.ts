@@ -7,8 +7,10 @@ interface MulterRequest extends Request {
   files: any;
 }
 
-export const index = async (req: Request, res: Response) => {
-  const posts = await Post.find({})
+export const index = async (req: RequestAuth, res: Response) => {
+  const posts = await Post.find({
+    room: { $in: [...req.user.rooms] },
+  })
     .populate("author")
     .populate("room")
     .sort({ createdAt: "desc" });
@@ -74,7 +76,10 @@ export const like = async (req: Request, res: Response) => {
 };
 
 export const comment = async (req: RequestAuth, res: Response) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id)
+    .populate("author")
+    .populate("room");
+
   post?.comments.push({
     ...req.body,
     username: req.user.username,
