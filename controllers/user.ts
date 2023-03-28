@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import ExpressError from "../utils/ExpressError";
 import User from "../models/user";
+import Post from "../models/post";
 
 export const signup = async (
   req: Request,
@@ -53,4 +54,16 @@ export const login = async (
   });
 
   res.json({ username, type: user.type, token });
+};
+
+export const getUser = async (req: Request, res: Response) => {
+  const user = await User.findById(req.params.id).populate("rooms");
+  res.json(user);
+};
+
+export const getUserPost = async (req: Request, res: Response) => {
+  const posts = await Post.find({ author: req.params.id })
+    .populate("author")
+    .populate("room");
+  res.json(posts);
 };
