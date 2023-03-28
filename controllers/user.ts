@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import ExpressError from "../utils/ExpressError";
 import User from "../models/user";
 import Post from "../models/post";
+import { RequestAuth } from "../types/User";
 
 export const signup = async (
   req: Request,
@@ -54,6 +55,21 @@ export const login = async (
   });
 
   res.json({ username, type: user.type, token });
+};
+
+export const edit = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
+  const { email } = req.body;
+
+  const existEmail = await User.findOne({ email });
+  if (existEmail && existEmail?.username !== req.user.username)
+    return next(new ExpressError("Email already in use", 400));
+
+  const user = await User.findByIdAndUpdate(req.user._id, { email });
+  res.json(user);
 };
 
 export const getUser = async (req: Request, res: Response) => {

@@ -4,6 +4,7 @@ export interface IUser {
   readonly _id: mongoose.Types.ObjectId;
   username: string;
   password: string;
+  email: string;
   type: AccountType;
   rooms: mongoose.Types.ObjectId[];
   quizzes: {

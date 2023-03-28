@@ -13,6 +13,10 @@ router.post("/signup", validateRegister, catchAsync(user.signup));
 
 router.post("/login", validateLogin, catchAsync(user.login));
 
+router.use(catchAsync(requireAuth));
+
+router.put("/update", catchAsync(user.edit));
+
 router.get("/:id", validateId, catchAsync(user.getUser));
 router.get("/:id/posts", validateId, catchAsync(user.getUserPost));
 
