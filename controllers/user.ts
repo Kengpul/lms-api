@@ -72,6 +72,14 @@ export const edit = async (
   res.json(user);
 };
 
+export const uploadAvatar = async (req: RequestAuth, res: Response) => {
+  const user = await User.findById(req.user._id);
+  user!.avatar.filename = (req.files! as any)[0].filename;
+  user!.avatar.path = (req.files! as any)[0].path;
+  await user!.save();
+  res.json((req.files! as any)[0]);
+};
+
 export const getUser = async (req: Request, res: Response) => {
   const user = await User.findById(req.params.id).populate("rooms");
   res.json(user);

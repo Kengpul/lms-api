@@ -17,6 +17,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  avatar: {
+    filename: String,
+    path: String,
+  },
   type: {
     type: String,
     required: true,

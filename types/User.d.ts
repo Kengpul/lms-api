@@ -5,6 +5,10 @@ export interface IUser {
   username: string;
   password: string;
   email: string;
+  avatar: {
+    filename: string;
+    path: string;
+  };
   type: AccountType;
   rooms: mongoose.Types.ObjectId[];
   quizzes: {
