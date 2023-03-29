@@ -20,6 +20,7 @@ export const postSchema = Joi.object({
 });
 
 export const registerSchema = Joi.object({
+  fullname: Joi.string().required(),
   username: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),

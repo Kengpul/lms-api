@@ -11,7 +11,7 @@ export const signup = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { username, password, email, type } = req.body;
+  const { fullname, username, password, email, type } = req.body;
 
   const exsitUsername = await User.findOne({ username });
   if (exsitUsername)
@@ -22,7 +22,7 @@ export const signup = async (
   const salt = await bcrypt.genSalt();
   const hash = await bcrypt.hash(password, salt);
 
-  const user = new User({ username, password: hash, email, type });
+  const user = new User({ fullname, username, password: hash, email, type });
   const userID = user._id;
 
   user.save();
@@ -54,7 +54,7 @@ export const login = async (
     expiresIn: "3d",
   });
 
-  res.json({ username, type: user.type, token });
+  res.json({ fullname: user.fullname, username, type: user.type, token });
 };
 
 export const edit = async (
@@ -62,13 +62,17 @@ export const edit = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { email } = req.body;
+  const { fullname, email } = req.body;
 
   const existEmail = await User.findOne({ email });
   if (existEmail && existEmail?.username !== req.user.username)
     return next(new ExpressError("Email already in use", 400));
 
-  const user = await User.findByIdAndUpdate(req.user._id, { email });
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { fullname, email },
+    { new: true }
+  );
   res.json(user);
 };
 

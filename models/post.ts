@@ -16,7 +16,7 @@ const postSchema = new Schema(
     ],
     comments: [
       {
-        username: String,
+        fullname: String,
         content: String,
         date: Date,
       },

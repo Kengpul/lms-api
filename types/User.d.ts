@@ -2,6 +2,7 @@ import { Request } from "express";
 
 export interface IUser {
   readonly _id: mongoose.Types.ObjectId;
+  fullname: string;
   username: string;
   password: string;
   email: string;
