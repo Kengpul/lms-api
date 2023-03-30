@@ -54,7 +54,7 @@ export const login = async (
     expiresIn: "3d",
   });
 
-  res.json({ fullname: user.fullname, username, type: user.type, token });
+  res.json({ fullname: user.fullname, avatar: user.avatar.path, username, type: user.type, token });
 };
 
 export const edit = async (
