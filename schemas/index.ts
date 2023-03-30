@@ -86,3 +86,8 @@ export const publishQuizSchema = Joi.object({
     }).required()
   ),
 });
+
+export const updateProfileSchema = Joi.object({
+  fullname: Joi.string().required(),
+  email: Joi.string().email().required(),
+});

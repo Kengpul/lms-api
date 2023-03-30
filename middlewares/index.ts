@@ -14,7 +14,8 @@ import {
   roomLinkSchema,
   quizSchema,
   publishQuizSchema,
-  editQuizSchema
+  editQuizSchema,
+  updateProfileSchema,
 } from "../schemas";
 
 interface JwtPayload {
@@ -85,6 +86,14 @@ export const validateEditQuiz = (
   validateBody(editQuizSchema, req.body, next);
 };
 
+export const validateEditProfile = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  validateBody(updateProfileSchema, req.body, next);
+};
+
 export const validateId = (req: Request, res: Response, next: NextFunction) => {
   if (!isValidObjectId(req.params.id)) {
     throw new ExpressError("Content not found", 400);
@@ -128,6 +137,16 @@ export const isAuthor = async (
   } else {
     next();
   }
+};
+
+export const isProfileAuthor = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.user._id != req.params.id)
+    throw new ExpressError("Unauthorized", 400);
+  next();
 };
 
 export const isTeacher = async (

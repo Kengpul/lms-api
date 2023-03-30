@@ -1,14 +1,15 @@
 import express from "express";
 const router = express.Router();
 import multer from "multer";
-import { storage } from "../cloudinary/avatar";
-const upload = multer({ storage });
+import { avatarStorage } from "../cloudinary";
+const upload = multer({ storage: avatarStorage });
 import {
   validateRegister,
   validateLogin,
   validateId,
   requireAuth,
-  isAuthor,
+  isProfileAuthor,
+  validateEditProfile,
 } from "../middlewares/";
 import catchAsync from "../utils/catchAsync";
 import * as user from "../controllers/user";
@@ -24,7 +25,8 @@ router.post("/uploadImage", upload.any(), catchAsync(user.uploadAvatar));
 router.put(
   "/:id/update",
   validateId,
-  catchAsync(isAuthor),
+  catchAsync(isProfileAuthor),
+  validateEditProfile,
   catchAsync(user.edit)
 );
 
