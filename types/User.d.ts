@@ -2,8 +2,14 @@ import { Request } from "express";
 
 export interface IUser {
   readonly _id: mongoose.Types.ObjectId;
+  fullname: string;
   username: string;
   password: string;
+  email: string;
+  avatar: {
+    filename: string;
+    path: string;
+  };
   type: AccountType;
   rooms: mongoose.Types.ObjectId[];
   quizzes: {

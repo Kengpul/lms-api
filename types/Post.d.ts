@@ -16,7 +16,7 @@ interface ILike {
 
 interface IComment {
   readonly _id: mongoose.Types.ObjectId;
-  username: string;
+  fullname: string;
   content: string;
   date: string;
 }

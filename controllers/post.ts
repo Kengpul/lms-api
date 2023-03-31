@@ -82,7 +82,7 @@ export const comment = async (req: RequestAuth, res: Response) => {
 
   post?.comments.push({
     ...req.body,
-    username: req.user.username,
+    fullname: req.user.fullname,
     date: Date.now(),
   });
   post?.save();

@@ -12,7 +12,17 @@ const params = {
   allowedFormats: ["jpeg", "jpg", "png"],
 };
 
+const avatarParams = {
+  folder: "learning-management-system/avatar",
+  allowedFormats: ["jpeg", "jpg", "png"],
+};
+
 export const storage = new CloudinaryStorage({
   cloudinary: cloudinary.v2,
   params,
+});
+
+export const avatarStorage = new CloudinaryStorage({
+  cloudinary: cloudinary.v2,
+  params: avatarParams,
 });
