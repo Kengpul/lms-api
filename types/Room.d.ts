@@ -11,6 +11,13 @@ export interface IRoom {
     meeting: string;
   };
   quizzes: mongoose.Types.ObjectId[];
+  messages: [
+    {
+      text: string;
+      author: string;
+      time: Date;
+    }
+  ];
 }
 
 export interface IOptions {

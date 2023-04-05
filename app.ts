@@ -7,7 +7,10 @@ const app = express();
 import mongoose from "mongoose";
 import cors from "cors";
 import ExpressError from "./utils/ExpressError.js";
+import http from "http";
+import { Server } from "socket.io";
 
+import { sockets } from "./controllers/room";
 import postRoute from "./routes/post";
 import userRoute from "./routes/user";
 import roomRoute from "./routes/room";
@@ -22,15 +25,24 @@ db.once("open", () => {
   console.log("Database connected");
 });
 
-const corsOptions = {
-  origin: "*",
-  credentials: true,
-  optionSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: "*",
+//   credentials: true,
+//   optionSuccessStatus: 200,
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  },
+});
+
+sockets(io);
 app.use("/post", postRoute);
 app.use("/connect", userRoute);
 app.use("/room", roomRoute);
@@ -52,4 +64,4 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on Port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on Port ${PORT}`));
