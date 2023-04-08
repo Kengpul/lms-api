@@ -155,7 +155,7 @@ export const profileSockets = (io: Server) => {
       await room?.save();
       io.emit(
         `receive-message-${data.room}`,
-        room?.messages[room.messages.length - 1]
+        room?.messages
       );
     });
   });
