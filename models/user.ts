@@ -22,8 +22,15 @@ const userSchema = new Schema({
     required: true,
   },
   avatar: {
-    filename: String,
-    path: String,
+    filename: {
+      type: String,
+      default: "learning-management-system/assets/default-avatar_hk6j0v",
+    },
+    path: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dsjrdrewd/image/upload/v1676885960/learning-management-system/assets/default-avatar_hk6j0v.png",
+    },
   },
   type: {
     type: String,
@@ -52,18 +59,6 @@ const userSchema = new Schema({
         score: Number,
       },
     ],
-    // messages: [
-    //   {
-    //     _id: String,
-    //     message: [
-    //       {
-    //         text: String,
-    //         author: String,
-    //         time: Date,
-    //       },
-    //     ],
-    //   },
-    // ],
   },
 });
 
