@@ -4,7 +4,15 @@ import bcrypt from "bcrypt";
 import ExpressError from "../utils/ExpressError";
 import User from "../models/user";
 import Post from "../models/post";
+import Chat from "../models/chat";
 import { RequestAuth } from "../types/User";
+import { Server } from "socket.io";
+interface Message {
+  room: string;
+  text: string;
+  author: string;
+  time: Date;
+}
 
 export const signup = async (
   req: Request,
@@ -54,7 +62,14 @@ export const login = async (
     expiresIn: "3d",
   });
 
-  res.json({ fullname: user.fullname, avatar: user.avatar.path, username, type: user.type, token });
+  res.json({
+    _id: userID,
+    fullname: user.fullname,
+    avatar: user.avatar.path,
+    username,
+    type: user.type,
+    token,
+  });
 };
 
 export const edit = async (
@@ -94,4 +109,54 @@ export const getUserPost = async (req: Request, res: Response) => {
     .populate("author")
     .populate("room");
   res.json(posts);
+};
+
+export const getMessages = async (req: Request, res: Response) => {
+  const chat = await Chat.findById(req.params.id).populate("messages");
+  res.json(chat);
+};
+
+export const profileSockets = (io: Server) => {
+  io.on("connection", (socket) => {
+    socket.on("join-message-room", async (data) => {
+      const room1 = await Chat.findOne({
+        members: [data.id, data.user],
+      });
+      const room2 = await Chat.findOne({
+        members: [data.user, data.id],
+      });
+
+      if (room1) {
+        socket.emit("receive-message-id", room1._id);
+        socket.join(room1._id);
+        return;
+      }
+
+      if (room2) {
+        socket.emit("receive-message-id", room2._id);
+        socket.join(room2._id);
+        return;
+      }
+
+      const chat = new Chat({ members: [data.id, data.user] });
+      await chat.save();
+      socket.emit("receive-message-id", chat._id);
+      socket.join(chat._id);
+    });
+
+    socket.on("send-direct-message", async (data: Message) => {
+      const room = await Chat.findById(data.room);
+      const body = {
+        text: data.text,
+        author: data.author,
+        time: new Date(Date.now()),
+      };
+      room!.messages.push(body);
+      await room?.save();
+      io.emit(
+        `receive-message-${data.room}`,
+        room?.messages[room.messages.length - 1]
+      );
+    });
+  });
 };

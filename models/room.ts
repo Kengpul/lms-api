@@ -1,3 +1,4 @@
+import { string } from "joi";
 import mongoose, { SchemaType } from "mongoose";
 import { IRoom } from "../types/Room";
 const { Schema } = mongoose;
@@ -44,6 +45,13 @@ const roomSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "Quiz",
+    },
+  ],
+  messages: [
+    {
+      text: String,
+      author: String,
+      time: Date,
     },
   ],
 });

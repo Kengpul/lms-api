@@ -3,9 +3,12 @@ import mongoose, { Document } from "mongoose";
 import { RequestAuth } from "../types/User";
 import { IRoom } from "../types/Room";
 import ExpressError from "../utils/ExpressError";
+import { Server } from "socket.io";
 import Room from "../models/room";
 import Post from "../models/post";
 import User from "../models/user";
+import { REPL_MODE_SLOPPY } from "repl";
+import Chat from "../models/chat";
 
 interface RoomsPoPulate extends Document {
   type: "Teacher" | "Student";
@@ -14,6 +17,12 @@ interface RoomsPoPulate extends Document {
     pending: mongoose.Types.ObjectId[];
     completed: mongoose.Types.ObjectId[];
   };
+}
+
+interface Message {
+  room: string;
+  text: string;
+  author: string;
 }
 
 export const getAll = async (req: RequestAuth, res: Response) => {
@@ -152,4 +161,24 @@ export const links = async (req: Request, res: Response) => {
   room!.link = req.body;
   await room?.save();
   res.json(room?.link);
+};
+
+export const sockets = (io: Server) => {
+  io.on("connection", (socket) => {
+    socket.on("join_room", (data) => {
+      socket.join(data);
+    });
+
+    socket.on("send_message", async (data: Message) => {
+      const room = await Room.findById(data.room);
+      const body = {
+        text: data.text,
+        author: data.author,
+        time: new Date(Date.now()),
+      };
+      room!.messages.push(body);
+      room?.save();
+      socket.to(data.room).emit("receive_message", room?.messages);
+    });
+  });
 };
