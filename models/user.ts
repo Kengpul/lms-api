@@ -52,6 +52,18 @@ const userSchema = new Schema({
         score: Number,
       },
     ],
+    // messages: [
+    //   {
+    //     _id: String,
+    //     message: [
+    //       {
+    //         text: String,
+    //         author: String,
+    //         time: Date,
+    //       },
+    //     ],
+    //   },
+    // ],
   },
 });
 

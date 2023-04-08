@@ -11,6 +11,7 @@ import http from "http";
 import { Server } from "socket.io";
 
 import { sockets } from "./controllers/room";
+import { profileSockets } from "./controllers/user";
 import postRoute from "./routes/post";
 import userRoute from "./routes/user";
 import roomRoute from "./routes/room";
@@ -25,12 +26,6 @@ db.once("open", () => {
   console.log("Database connected");
 });
 
-// const corsOptions = {
-//   origin: "*",
-//   credentials: true,
-//   optionSuccessStatus: 200,
-// };
-
 app.use(cors());
 app.use(express.json());
 
@@ -43,6 +38,7 @@ const io = new Server(server, {
 });
 
 sockets(io);
+profileSockets(io);
 app.use("/post", postRoute);
 app.use("/connect", userRoute);
 app.use("/room", roomRoute);

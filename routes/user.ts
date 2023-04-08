@@ -32,5 +32,6 @@ router.put(
 
 router.get("/:id", validateId, catchAsync(user.getUser));
 router.get("/:id/posts", validateId, catchAsync(user.getUserPost));
+router.get("/:id/messages", validateId, catchAsync(user.getMessages));
 
 export default router;

@@ -8,6 +8,7 @@ import Room from "../models/room";
 import Post from "../models/post";
 import User from "../models/user";
 import { REPL_MODE_SLOPPY } from "repl";
+import Chat from "../models/chat";
 
 interface RoomsPoPulate extends Document {
   type: "Teacher" | "Student";
@@ -173,7 +174,7 @@ export const sockets = (io: Server) => {
       const body = {
         text: data.text,
         author: data.author,
-        time: new Date(Date.now())
+        time: new Date(Date.now()),
       };
       room!.messages.push(body);
       room?.save();
