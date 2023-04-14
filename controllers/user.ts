@@ -100,7 +100,9 @@ export const uploadAvatar = async (req: RequestAuth, res: Response) => {
 };
 
 export const getUser = async (req: Request, res: Response) => {
-  const user = await User.findById(req.params.id).populate("rooms");
+  const user = await User.findById(req.params.id)
+    .populate("rooms")
+    .populate("quizzes.pending");
   res.json(user);
 };
 
