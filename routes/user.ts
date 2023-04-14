@@ -22,6 +22,8 @@ router.use(catchAsync(requireAuth));
 
 router.post("/uploadImage", upload.any(), catchAsync(user.uploadAvatar));
 
+router.post("/room", catchAsync(user.getChatRoom));
+
 router.put(
   "/:id/update",
   validateId,
@@ -32,6 +34,5 @@ router.put(
 
 router.get("/:id", validateId, catchAsync(user.getUser));
 router.get("/:id/posts", validateId, catchAsync(user.getUserPost));
-router.get("/:id/messages", validateId, catchAsync(user.getMessages));
 
 export default router;

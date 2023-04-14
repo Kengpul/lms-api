@@ -111,39 +111,25 @@ export const getUserPost = async (req: Request, res: Response) => {
   res.json(posts);
 };
 
-export const getMessages = async (req: Request, res: Response) => {
-  const chat = await Chat.findById(req.params.id).populate("messages");
+export const getChatRoom = async (req: Request, res: Response) => {
+  const { id, user } = req.body;
+  const room1 = await Chat.findOne({
+    members: [id, user],
+  });
+  const room2 = await Chat.findOne({
+    members: [user, id],
+  });
+
+  if (room1) return res.json(room1);
+  if (room2) return res.json(room2);
+
+  const chat = new Chat({ members: [id, user] });
+  await chat.save();
   res.json(chat);
 };
 
 export const profileSockets = (io: Server) => {
   io.on("connection", (socket) => {
-    socket.on("join-message-room", async (data) => {
-      const room1 = await Chat.findOne({
-        members: [data.id, data.user],
-      });
-      const room2 = await Chat.findOne({
-        members: [data.user, data.id],
-      });
-
-      if (room1) {
-        socket.emit("receive-message-id", room1._id);
-        socket.join(room1._id);
-        return;
-      }
-
-      if (room2) {
-        socket.emit("receive-message-id", room2._id);
-        socket.join(room2._id);
-        return;
-      }
-
-      const chat = new Chat({ members: [data.id, data.user] });
-      await chat.save();
-      socket.emit("receive-message-id", chat._id);
-      socket.join(chat._id);
-    });
-
     socket.on("send-direct-message", async (data: Message) => {
       const room = await Chat.findById(data.room);
       const body = {
@@ -153,10 +139,7 @@ export const profileSockets = (io: Server) => {
       };
       room!.messages.push(body);
       await room?.save();
-      io.emit(
-        `receive-message-${data.room}`,
-        room?.messages
-      );
+      io.emit(`receive-message-${data.room}`, room?.messages);
     });
   });
 };
