@@ -23,6 +23,7 @@ router.use(catchAsync(requireAuth));
 router.post("/uploadImage", upload.any(), catchAsync(user.uploadAvatar));
 
 router.post("/room", catchAsync(user.getChatRoom));
+router.get("/chats", catchAsync(user.getAllRooms));
 
 router.put(
   "/:id/update",

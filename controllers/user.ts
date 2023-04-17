@@ -113,6 +113,15 @@ export const getUserPost = async (req: Request, res: Response) => {
   res.json(posts);
 };
 
+export const getAllRooms = async (req: RequestAuth, res: Response) => {
+  const chats = await Chat.find({
+    members: { $in: [req.user._id] },
+    messages: { $not: { $size: 0 } },
+  }).populate("members");
+
+  res.json(chats);
+};
+
 export const getChatRoom = async (req: Request, res: Response) => {
   const { id, user } = req.body;
   const room1 = await Chat.findOne({
