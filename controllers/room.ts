@@ -7,7 +7,6 @@ import { Server } from "socket.io";
 import Room from "../models/room";
 import Post from "../models/post";
 import User from "../models/user";
-import { REPL_MODE_SLOPPY } from "repl";
 import Chat from "../models/chat";
 
 interface RoomsPoPulate extends Document {
@@ -55,8 +54,14 @@ export const create = async (req: RequestAuth, res: Response) => {
   const user = await User.findById(req.user._id);
   room.teachers.push(user!._id);
   user?.rooms.push(room._id);
+
+  const chat = new Chat();
+  chat.members.push(user?._id);
+  room.chat = chat._id;
+
   await room.save();
   await user?.save();
+  await chat.save();
   res.json(room);
 };
 
@@ -123,8 +128,12 @@ export const accept = async (req: Request, res: Response) => {
     user.quizzes.pending.push(quiz._id);
   }
 
+  const chat = await Chat.findById(room.chat);
+  chat?.members.push(id);
+
   await room.save();
   await user.save();
+  await chat?.save();
 
   const updatedRoom = await Room.findById(roomId)
     .populate("pending")
@@ -151,6 +160,14 @@ export const leave = async (req: RequestAuth, res: Response) => {
   room!.save();
 
   const rooms = user.rooms.filter((room) => (room._id as any) != req.params.id);
+
+  const chat = await Chat.findById(room?.chat);
+  if (chat) {
+    const members = chat.members.filter((member) => member._id !== user._id);
+    chat.members = members;
+    chat.save();
+  }
+
   user.rooms = rooms;
   user.save();
   res.json(user.rooms);
@@ -163,6 +180,17 @@ export const links = async (req: Request, res: Response) => {
   res.json(room?.link);
 };
 
+export const chat = async (req: Request, res: Response) => {
+  const room = await Room.findById(req.params.id)
+    .populate("teachers")
+    .populate("students");
+  const chat = await Chat.findById(room?.chat)
+    .populate("members")
+    .populate("messages");
+
+  res.json({ chat, room });
+};
+
 export const sockets = (io: Server) => {
   io.on("connection", (socket) => {
     socket.on("join_room", (data) => {
@@ -170,7 +198,7 @@ export const sockets = (io: Server) => {
     });
 
     socket.on("send_message", async (data: Message) => {
-      const room = await Room.findById(data.room);
+      const room = await Chat.findById(data.room);
       const body = {
         text: data.text,
         author: data.author,

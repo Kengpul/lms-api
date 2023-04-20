@@ -2,6 +2,7 @@ export interface IRoom {
   readonly _id: mongoose.Types.ObjectId;
   name: string;
   code: string;
+  chat: mongoose.Types.ObjectId;
   posts: mongoose.Types.ObjectId[];
   teachers: mongoose.Types.ObjectId[];
   students: IUser[];
@@ -11,13 +12,6 @@ export interface IRoom {
     meeting: string;
   };
   quizzes: mongoose.Types.ObjectId[];
-  messages: [
-    {
-      text: string;
-      author: string;
-      time: Date;
-    }
-  ];
 }
 
 export interface IOptions {

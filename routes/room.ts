@@ -37,4 +37,6 @@ router
   .post(validateId, catchAsync(room.accept))
   .delete(validateId, catchAsync(room.reject));
 
-export default router
+router.get("/:id/chat", validateId, catchAsync(room.chat));
+
+export default router;

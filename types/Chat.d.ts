@@ -1,6 +1,8 @@
+import { IUser } from "./User";
+
 export interface Chat {
   readonly _id: mongoose.Types.ObjectId;
-  members: string[];
+  members: IUser[];
   messages: {
     text: string;
     author: string;

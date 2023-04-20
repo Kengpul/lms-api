@@ -21,6 +21,10 @@ const roomSchema = new Schema({
     required: true,
     unique: true,
   },
+  chat: {
+    type: Schema.Types.ObjectId,
+    ref: "Chat",
+  },
   posts: [
     {
       type: Schema.Types.ObjectId,
@@ -45,13 +49,6 @@ const roomSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "Quiz",
-    },
-  ],
-  messages: [
-    {
-      text: String,
-      author: String,
-      time: Date,
     },
   ],
 });
